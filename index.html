@@ -706,26 +706,10 @@
                 }
             });
             
-            // Disable developer tools detection
-            var devtools = {
-                open: false,
-                orientation: null
-            };
-            
-            var threshold = 160;
-            
-            setInterval(function() {
-                if (window.outerHeight - window.innerHeight > threshold || 
-                    window.outerWidth - window.innerWidth > threshold) {
-                    if (!devtools.open) {
-                        devtools.open = true;
-                        document.body.innerHTML = '<h1 style="text-align:center;color:red;margin-top:200px;">Developer tools detected! Access denied.</h1>';
-                        window.location.replace('about:blank');
-                    }
-                } else {
-                    devtools.open = false;
-                }
-            }, 500);
+            // Developer tools detection disabled to prevent page reload issues
+            // var devtools = { open: false, orientation: null };
+            // var threshold = 160;
+            // setInterval(function() { ... }, 500);
             
             // Disable console access
             var console = {
@@ -753,26 +737,9 @@
                 document.body.innerHTML = '<h1 style="text-align:center;color:red;margin-top:200px;">Printing disabled!</h1>';
             });
             
-            // Anti-tamper protection (ignore dynamic content changes)
-            var originalBodyHTML = document.body.innerHTML;
-            setInterval(function() {
-                var currentBodyHTML = document.body.innerHTML;
-                // Ignore progress bar width changes and dynamic content
-                var cleanOriginal = originalBodyHTML.replace(/width:\s*\d+%/g, '').replace(/style="[^"]*width:\s*\d+%[^"]*"/g, '');
-                var cleanCurrent = currentBodyHTML.replace(/width:\s*\d+%/g, '').replace(/style="[^"]*width:\s*\d+%[^"]*"/g, '');
-                
-                if (cleanCurrent !== cleanOriginal) {
-                    // Check if the change is significant (not just progress bar)
-                    var originalLength = cleanOriginal.length;
-                    var currentLength = cleanCurrent.length;
-                    var difference = Math.abs(originalLength - currentLength);
-                    
-                    // Only reload if significant change detected (>500 characters)
-                    if (difference > 500) {
-                        window.location.reload();
-                    }
-                }
-            }, 2000);
+            // Anti-tamper protection disabled to prevent page reload issues
+            // var originalBodyHTML = document.body.innerHTML;
+            // setInterval(function() { ... }, 2000);
             
         })();
         
