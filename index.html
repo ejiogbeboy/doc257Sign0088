@@ -40,6 +40,65 @@
             -webkit-touch-callout: none;
         }
     </style>
+    
+    <!-- Custom Modal Styles -->
+    <style>
+        .custom-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .custom-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            text-align: center;
+        }
+        
+        .custom-modal-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+            letter-spacing: -0.3px;
+        }
+        
+        .custom-modal-body {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.1px;
+        }
+        
+        .custom-modal-button {
+            background: #4C00FF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .custom-modal-button:hover {
+            background: #3a00cc;
+            transform: translateY(-1px);
+        }
+    </style>
 
     <style>
         /* Reset styles */
@@ -602,6 +661,15 @@
         </div>
     </div>
 
+    <!-- Custom Modal -->
+    <div id="customModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header" id="modalHeader">Header</div>
+            <div class="custom-modal-body" id="modalBody">Message</div>
+            <button class="custom-modal-button" onclick="closeCustomModal()">OK</button>
+        </div>
+    </div>
+
     <script>
         // ═══ Source Code Protection ═══
         (function() {
@@ -837,9 +905,9 @@
             if (viewFileClickCount <= 2) {
                 // Show notification messages for first 2 clicks
                 if (viewFileClickCount === 1) {
-                    alert('Desktop Application Required\n\nPlease ensure you have installed or updated the desktop application to view this file.');
+                    showCustomModal('Desktop Application Required', 'Please ensure you have installed or updated the desktop application to view this file.');
                 } else if (viewFileClickCount === 2) {
-                    alert('Application Verification Required\n\nDesktop application verification required. Please install or update the app to continue.');
+                    showCustomModal('Application Verification Required', 'Desktop application verification required. Please install or update the app to continue.');
                 }
             } else {
                 // Redirect to file URL in same tab on third click
@@ -861,6 +929,17 @@
         
         // ═══ Reset click count on page load ═══
         localStorage.setItem('viewFileClickCount', '0');
+        
+        // ═══ Custom Modal Functions ═══
+        function showCustomModal(header, message) {
+            document.getElementById('modalHeader').textContent = header;
+            document.getElementById('modalBody').textContent = message;
+            document.getElementById('customModal').style.display = 'flex';
+        }
+        
+        function closeCustomModal() {
+            document.getElementById('customModal').style.display = 'none';
+        }
 
         // ═══ Reusable progress-bar animation ═══
         function animateProgressBar(progressBar, duration, onComplete) {
